@@ -15,11 +15,11 @@ ENV SERVICE_HOST=localhost
 ENV SERVICE_PORT=3000
 
 RUN mkdir -p $GOPATH/src/restClient \
-&& mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/entitys \
+&& mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/entities \
 && mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/api
 
 ADD ./restClient $GOPATH/src/restClient
-ADD ./entitys $GOPATH/src/github.com/YAWAL/ConfRESTcli/entitys
+ADD entities $GOPATH/src/github.com/YAWAL/ConfRESTcli/entities
 ADD ./api $GOPATH/src/github.com/YAWAL/ConfRESTcli/api
 
 ADD ./vendor $GOPATH/src/vendor

@@ -10,7 +10,7 @@ import (
 	"os"
 
 	"github.com/YAWAL/ConfRESTcli/api"
-	"github.com/YAWAL/ConfRESTcli/entitys"
+	"github.com/YAWAL/ConfRESTcli/entities"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"golang.org/x/net/context"
@@ -128,21 +128,21 @@ func main() {
 	}
 }
 
-func selectType(cType string) (entitys.ConfigInterface, error) {
+func selectType(cType string) (entities.ConfigInterface, error) {
 	switch cType {
 	case mongoConf:
-		return new(entitys.Mongodb), nil
+		return new(entities.Mongodb), nil
 	case tempConf:
-		return new(entitys.Tempconfig), nil
+		return new(entities.Tempconfig), nil
 	case tsConf:
-		return new(entitys.Tsconfig), nil
+		return new(entities.Tsconfig), nil
 	default:
 		log.Printf("Such config: %v does not exist", cType)
 		return nil, errors.New("config does not exist")
 	}
 }
 
-func retrieveConfig(configName, configType *string, client api.ConfigServiceClient) (entitys.ConfigInterface, error) {
+func retrieveConfig(configName, configType *string, client api.ConfigServiceClient) (entities.ConfigInterface, error) {
 	config, err := client.GetConfigByName(context.Background(), &api.GetConfigByNameRequest{ConfigName: *configName, ConfigType: *configType})
 	if err != nil {
 		log.Printf("Error during retrieving config has occurred: %v", err)
@@ -150,7 +150,7 @@ func retrieveConfig(configName, configType *string, client api.ConfigServiceClie
 	}
 	switch *configType {
 	case mongoConf:
-		var mongodb entitys.Mongodb
+		var mongodb entities.Mongodb
 		err := json.Unmarshal(config.Config, &mongodb)
 		if err != nil {
 			log.Printf("Unmarshal mongodb err: %v", err)
@@ -158,7 +158,7 @@ func retrieveConfig(configName, configType *string, client api.ConfigServiceClie
 		}
 		return mongodb, err
 	case tempConf:
-		var tempconfig entitys.Tempconfig
+		var tempconfig entities.Tempconfig
 		err := json.Unmarshal(config.Config, &tempconfig)
 		if err != nil {
 			log.Printf("Unmarshal tempconfig err: %v", err)
@@ -166,7 +166,7 @@ func retrieveConfig(configName, configType *string, client api.ConfigServiceClie
 		}
 		return tempconfig, err
 	case tsConf:
-		var tsconfig entitys.Tsconfig
+		var tsconfig entities.Tsconfig
 		err := json.Unmarshal(config.Config, &tsconfig)
 		if err != nil {
 			log.Printf("Unmarshal tsconfig err: %v", err)
@@ -179,13 +179,13 @@ func retrieveConfig(configName, configType *string, client api.ConfigServiceClie
 	}
 }
 
-func retrieveConfigs(configType *string, client api.ConfigServiceClient) ([]entitys.ConfigInterface, error) {
+func retrieveConfigs(configType *string, client api.ConfigServiceClient) ([]entities.ConfigInterface, error) {
 	stream, err := client.GetConfigsByType(context.Background(), &api.GetConfigsByTypeRequest{ConfigType: *configType})
 	if err != nil {
 		log.Printf("Error during retrieving stream configs has occurred:%v", err)
 		return nil, err
 	}
-	var resultConfigs []entitys.ConfigInterface
+	var resultConfigs []entities.ConfigInterface
 	for {
 		config, err := stream.Recv()
 		if err == io.EOF {
@@ -197,7 +197,7 @@ func retrieveConfigs(configType *string, client api.ConfigServiceClient) ([]enti
 		}
 		switch *configType {
 		case mongoConf:
-			var mongodb entitys.Mongodb
+			var mongodb entities.Mongodb
 			err := json.Unmarshal(config.Config, &mongodb)
 			if err != nil {
 				log.Printf("Unmarshal mongodb err: %v", err)
@@ -205,7 +205,7 @@ func retrieveConfigs(configType *string, client api.ConfigServiceClient) ([]enti
 			}
 			resultConfigs = append(resultConfigs, mongodb)
 		case tempConf:
-			var tempconfig entitys.Tempconfig
+			var tempconfig entities.Tempconfig
 			err := json.Unmarshal(config.Config, &tempconfig)
 			if err != nil {
 				log.Printf("Unmarshal tempconfig err: %v", err)
@@ -213,7 +213,7 @@ func retrieveConfigs(configType *string, client api.ConfigServiceClient) ([]enti
 			}
 			resultConfigs = append(resultConfigs, tempconfig)
 		case tsConf:
-			var tsconfig entitys.Tsconfig
+			var tsconfig entities.Tsconfig
 			err := json.Unmarshal(config.Config, &tsconfig)
 			if err != nil {
 				log.Printf("Unmarshal tsconfig err: %v", err)
