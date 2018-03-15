@@ -53,24 +53,6 @@ func TestSelectType(t *testing.T) {
 	}
 }
 
-//func (m MockGrpcClient) GetConfigByName(ctx context.Context, in *api.GetConfigByNameRequest, opts ...grpc.CallOption) (*api.GetConfigResponce, error) {
-//	fmt.Println("from mock func")
-//	return &api.GetConfigResponce{Config: []byte("1")}, errors.New("err ftom moc func")
-//}
-//func (m MockGrpcClient) GetConfigsByType(ctx context.Context, in *api.GetConfigsByTypeRequest, opts ...grpc.CallOption) (api.ConfigService_GetConfigsByTypeClient, error) {
-//	return nil, nil
-//}
-//
-//func (m MockGrpcClient) CreateConfig(ctx context.Context, in *api.Config, opts ...grpc.CallOption) (*api.Responce, error) {
-//	return nil, nil
-//}
-//func (m MockGrpcClient) DeleteConfig(ctx context.Context, in *api.DeleteConfigRequest, opts ...grpc.CallOption) (*api.Responce, error) {
-//	return nil, nil
-//}
-//func (m MockGrpcClient) UpdateConfig(ctx context.Context, in *api.Config, opts ...grpc.CallOption) (*api.Responce, error) {
-//	return nil, nil
-//}
-
 func TestRetrieveConfig(t *testing.T) {
 	mockConfigClient := Mock{}
 	testMongoType := "mongodb"
@@ -139,52 +121,6 @@ func TestDeleteConfig(t *testing.T) {
 	}
 	assert.Equal(t, &api.Responce{Status: "OK"}, result)
 }
-
-//func (m Mock) selectType(cType string) (entities.ConfigInterface, error) {
-//	fmt.Println("select")
-//	return entities.Mongodb{}, nil
-//}
-
-//func TestUpdateConfig(t *testing.T) {
-//	mockConfigClient := Mock{}
-//	//mockConfigClient.selectType = func(cType string) { return entities.Mongodb{}, nil }
-//	testMongoType := "mongodb"
-//	testName := "testName"
-//	ctrl := gomock.NewController(t)
-//	mockGrpcClient := NewMockConfigServiceClient(ctrl)
-//	mongoConfig := entities.Mongodb{Domain: testName, Mongodb: true, Host: "testHost", Port: "testPort"}
-//	byteResMongo, err := json.Marshal(mongoConfig)
-//	if err != nil {
-//		t.Error("error during unit testing: ", err)
-//	}
-//	fmt.Println("-------------")
-//	fmt.Println(mockConfigClient.selectType("tsconfig"))
-//	fmt.Println("-------------")
-//	mockGrpcClient.EXPECT().UpdateConfig(gomock.Any(), &api.Config{ConfigType: testMongoType, Config: byteResMongo}).Return(&api.Responce{Status: "OK"}, nil)
-//	fmt.Println("******************")
-//	fmt.Println(mockConfigClient.GrpcClient)
-//	mockConfigClient.grpcClient = mockGrpcClient
-//	fmt.Println(mockConfigClient.grpcClient)
-//	c := gin.Context{}
-//	c.Params = append(c.Params, gin.Param{Key: "type", Value: testMongoType})
-//	c.Params = append(c.Params, gin.Param{Key: "name", Value: testName})
-//	//c.Params = append(c.Params, gin.Param{Key: "domain", Value: testName})
-//	//c.Params = append(c.Params, gin.Param{Key: "mongodb", Value: testMongoType})
-//	//c.Params = append(c.Params, gin.Param{Key: "host", Value: testName})
-//	//c.Params = append(c.Params, gin.Param{Key: "port", Value: testName})
-//	c.Request.Header.Set("Content-Type", "application/json")
-//	c.Request.PostForm.Set("domain", "true")
-//	c.Request.PostForm.Set("host", "true")
-//	c.Request.PostForm.Set("mongodb", "true")
-//	c.Request.PostForm.Set("port", "true")
-//	fmt.Println("******************")
-//	fmt.Println("c", c)
-//	result, err := mockConfigClient.updateConfig(&c)
-//	if err != nil {
-//		t.Error("error during unit testing: ", err)
-//	}
-//	assert.Equal(t, &api.Responce{Status: "OK"}, result)
-//}
 
 func TestRetrieveConfigsMongo(t *testing.T) {
 	mockConfigClient := Mock{}
