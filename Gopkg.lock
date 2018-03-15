@@ -2,13 +2,10 @@
 
 
 [[projects]]
-  name = "github.com/YAWAL/GetMeConf"
-  packages = [
-    "api",
-    "database"
-  ]
-  revision = "0d4145180eac6dd3e8ae7703300894bdf7b2844f"
-  version = "v3.0.0"
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -28,6 +25,12 @@
   revision = "5d3f30cfc81f9109850fa9043a19783cbbde68a5"
 
 [[projects]]
+  name = "github.com/golang/mock"
+  packages = ["gomock"]
+  revision = "13f360950a79f5864a972c786a10a50e44b69541"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = [
     "proto",
@@ -40,31 +43,10 @@
   version = "v1.0.0"
 
 [[projects]]
-  name = "github.com/jinzhu/gorm"
-  packages = ["."]
-  revision = "5174cc5c242a728b435ea2be8a2f7f998e15429b"
-  version = "v1.0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/jinzhu/inflection"
-  packages = ["."]
-  revision = "1c35d901db3da928c72a72d8458480cc9ade058f"
-
-[[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
   revision = "0ac74bba4a81211b28e32ef260c0f16ae41f1377"
   version = "1.1.1"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/lib/pq"
-  packages = [
-    ".",
-    "oid"
-  ]
-  revision = "88edab0803230a3898347e77b474f8c1820a1f20"
 
 [[projects]]
   name = "github.com/mattn/go-isatty"
@@ -73,10 +55,16 @@
   version = "v0.0.3"
 
 [[projects]]
-  name = "github.com/pkg/errors"
-  packages = ["."]
-  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
-  version = "v0.8.0"
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
+  version = "v1.2.1"
 
 [[projects]]
   name = "github.com/ugorji/go"
@@ -176,12 +164,6 @@
   version = "v8.18.2"
 
 [[projects]]
-  name = "gopkg.in/gormigrate.v1"
-  packages = ["."]
-  revision = "21b0b93e8253d575d9185974835423f98d30158d"
-  version = "v1.2.0"
-
-[[projects]]
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
@@ -190,6 +172,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "5ce2828b197ec7793763c7f2b92afa7c6f2d12d9f26fe6c536f235281733c3ab"
+  inputs-digest = "79eb4d8be1ed4c2a38f18b52b9db5794edfff23c40989c9607d5ac05108910c8"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -8,12 +8,6 @@ ENV GOPATH=/go
 
 ENV PATH=$GOPATH/bin:$PATH
 
-ENV CLIENT_PORT=8080
-
-ENV SERVICE_HOST=localhost
-
-ENV SERVICE_PORT=3000
-
 RUN mkdir -p $GOPATH/src/restClient \
 && mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/entities \
 && mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/api
@@ -30,6 +24,8 @@ WORKDIR $GOPATH/src/restClient
 
 RUN go build -o main
 
+RUN rm -rf /GOPATH/src && rm -rf /GOPATH/pkg
+
 CMD ["/go/src/restClient/main"]
 
-EXPOSE $PORT
+EXPOSE $CLIENT_PORT

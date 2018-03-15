@@ -1,7 +1,7 @@
 REST client for the config service
 ----------------------------------
 
-Converts http requests to grpc, allowing CRUD operation for configs.
+This is a REST client for the Config service. It converts http requests to grpc, allowing CRUD operation for configs. 
 
 
 To find a config using its **type** and **name** make a GET request
@@ -24,13 +24,17 @@ To update a config make a PUT request with a config JSON-object in body
 ````````````````````````````
 http://host:port/updateConfig/type
 ````````````````````````````
+To check if the application is running make a GET request
+````````````````````````````
+http://host:port/info
+````````````````````````````
 How to start
 
-Run to install dep
+To install dep  dependency management tool run 
 ````````````````````````````
 make install dep
 ````````````````````````````
-Run to install application dependencies
+To install application dependencies run
 ````````````````````````````
 make dependencies
 ````````````````````````````

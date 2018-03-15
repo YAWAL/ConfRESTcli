@@ -1,9 +1,5 @@
-
-export CLIENT_PORT=8080
-
-export SERVICE_HOST=localhost
-
-export SERVICE_PORT=3000
+include .env
+export
 
 all: dependencies build
 
