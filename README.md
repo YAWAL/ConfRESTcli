@@ -47,6 +47,11 @@ To to run the application
 ````````````````````````````
 make run
 ````````````````````````````
+To run tests
+
+``````````````````
+make tests
+``````````````````
 To to run the application in docker container
 ````````````````````````````
 make docker-build
