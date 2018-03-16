@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/YAWAL/GetMeConfAPI"
+  packages = ["api"]
+  revision = "cd940b4ff6b465d0e5f0e2a972dba98ce65c91f7"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
@@ -139,6 +145,7 @@
     "connectivity",
     "credentials",
     "encoding",
+    "encoding/proto",
     "grpclb/grpc_lb_v1/messages",
     "grpclog",
     "internal",
@@ -154,8 +161,8 @@
     "tap",
     "transport"
   ]
-  revision = "6b51017f791ae1cfbec89c52efdf444b13b550ef"
-  version = "v1.9.2"
+  revision = "8e4536a86ab602859c20df5ebfd0bd4228d08655"
+  version = "v1.10.0"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"
@@ -172,6 +179,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "79eb4d8be1ed4c2a38f18b52b9db5794edfff23c40989c9607d5ac05108910c8"
+  inputs-digest = "f5f6e39fd8b0167a74b002110948360c6a990160b4e1d04ab1e4d0d4f39117ed"
   solver-name = "gps-cdcl"
   solver-version = 1

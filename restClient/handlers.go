@@ -9,8 +9,8 @@ import (
 
 	"strconv"
 
-	"github.com/YAWAL/ConfRESTcli/api"
 	"github.com/YAWAL/ConfRESTcli/entities"
+	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 )

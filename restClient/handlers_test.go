@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/YAWAL/ConfRESTcli/api"
 	"github.com/YAWAL/ConfRESTcli/entities"
+	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
