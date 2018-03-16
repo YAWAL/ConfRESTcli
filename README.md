@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/YAWAL/ConfRESTcli.svg?branch=master)](https://travis-ci.org/YAWAL/ConfRESTcli)
+
 REST client for the config service
 ----------------------------------
 
