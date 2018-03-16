@@ -7,7 +7,7 @@ package main
 import (
 	reflect "reflect"
 
-	api "github.com/YAWAL/ConfRESTcli/api"
+	api "github.com/YAWAL/GetMeConfAPI/api"
 	gomock "github.com/golang/mock/gomock"
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"

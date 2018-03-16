@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/YAWAL/ConfRESTcli/api"
 	"github.com/YAWAL/ConfRESTcli/entities"
+	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -82,22 +82,34 @@ func TestRetrieveConfig(t *testing.T) {
 	mockGrpcClient.EXPECT().GetConfigByName(gomock.Any(), &api.GetConfigByNameRequest{ConfigName: testName, ConfigType: testTempType}).Return(&api.GetConfigResponce{Config: byteResTemp}, nil)
 	mockGrpcClient.EXPECT().GetConfigByName(gomock.Any(), &api.GetConfigByNameRequest{ConfigName: testName, ConfigType: notPresentedType}).Return(nil, errors.New("config does not exist"))
 	mockConfigClient.grpcClient = mockGrpcClient
-	result, err := mockConfigClient.retrieveConfig(testName, testMongoType)
+	c := gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testMongoType})
+	c.Params = append(c.Params, gin.Param{Key: "name", Value: testName})
+	result, err := mockConfigClient.retrieveConfig(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
 	assert.Equal(t, mongoConfig, result)
-	result, err = mockConfigClient.retrieveConfig(testName, testTsType)
+	c = gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testTsType})
+	c.Params = append(c.Params, gin.Param{Key: "name", Value: testName})
+	result, err = mockConfigClient.retrieveConfig(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
 	assert.Equal(t, tsConfig, result)
-	result, err = mockConfigClient.retrieveConfig(testName, testTempType)
+	c = gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testTempType})
+	c.Params = append(c.Params, gin.Param{Key: "name", Value: testName})
+	result, err = mockConfigClient.retrieveConfig(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
 	assert.Equal(t, tempConfig, result)
-	_, err = mockConfigClient.retrieveConfig(testName, notPresentedType)
+	c = gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: notPresentedType})
+	c.Params = append(c.Params, gin.Param{Key: "name", Value: testName})
+	_, err = mockConfigClient.retrieveConfig(&c)
 	if assert.Error(t, err) {
 		assert.Equal(t, errors.New("config does not exist"), err)
 	}
@@ -138,7 +150,9 @@ func TestRetrieveConfigsMongo(t *testing.T) {
 	stream.EXPECT().Recv().Return(nil, io.EOF)
 	mockGrpcClient.EXPECT().GetConfigsByType(gomock.Any(), &api.GetConfigsByTypeRequest{ConfigType: testMongoType}).Return(stream, nil)
 	mockConfigClient.grpcClient = mockGrpcClient
-	result, err := mockConfigClient.retrieveConfigs(&testMongoType)
+	c := gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testMongoType})
+	result, err := mockConfigClient.retrieveConfigs(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
@@ -163,7 +177,9 @@ func TestRetrieveConfigsTs(t *testing.T) {
 	mockGrpcClient.EXPECT().GetConfigsByType(gomock.Any(), &api.GetConfigsByTypeRequest{ConfigType: testTsType}).Return(stream, nil)
 
 	mockConfigClient.grpcClient = mockGrpcClient
-	result, err := mockConfigClient.retrieveConfigs(&testTsType)
+	c := gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testTsType})
+	result, err := mockConfigClient.retrieveConfigs(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
@@ -187,12 +203,15 @@ func TestRetrieveConfigsTemp(t *testing.T) {
 	mockGrpcClient.EXPECT().GetConfigsByType(gomock.Any(), &api.GetConfigsByTypeRequest{ConfigType: testTempType}).Return(stream, nil)
 
 	mockConfigClient.grpcClient = mockGrpcClient
-	result, err := mockConfigClient.retrieveConfigs(&testTempType)
+	c := gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: testTempType})
+	result, err := mockConfigClient.retrieveConfigs(&c)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
 	assert.ElementsMatch(t, []entities.Tempconfig{tempConfig}, result)
 }
+
 func TestRetrieveConfigsNotExisting(t *testing.T) {
 	mockConfigClient := Mock{}
 	notPresentedType := "errType"
@@ -203,7 +222,9 @@ func TestRetrieveConfigsNotExisting(t *testing.T) {
 	stream.EXPECT().Recv().Return(nil, io.EOF)
 	mockGrpcClient.EXPECT().GetConfigsByType(gomock.Any(), &api.GetConfigsByTypeRequest{ConfigType: notPresentedType}).Return(stream, errors.New("config does not exist"))
 	mockConfigClient.grpcClient = mockGrpcClient
-	_, err := mockConfigClient.retrieveConfigs(&notPresentedType)
+	c := gin.Context{}
+	c.Params = append(c.Params, gin.Param{Key: "type", Value: notPresentedType})
+	_, err := mockConfigClient.retrieveConfigs(&c)
 	if assert.Error(t, err) {
 		assert.Equal(t, errors.New("config does not exist"), err)
 	}
