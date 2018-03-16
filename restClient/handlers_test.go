@@ -97,7 +97,7 @@ func TestRetrieveConfig(t *testing.T) {
 		t.Error("error during unit testing: ", err)
 	}
 	assert.Equal(t, tempConfig, result)
-	result, err = mockConfigClient.retrieveConfig(testName, notPresentedType)
+	_, err = mockConfigClient.retrieveConfig(testName, notPresentedType)
 	if assert.Error(t, err) {
 		assert.Equal(t, errors.New("config does not exist"), err)
 	}
