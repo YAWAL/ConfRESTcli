@@ -24,5 +24,10 @@ install dep:
 	echo    "Installing dep"
 	curl    https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
+.PHONY: tests
+tests:
+	echo "Tests"
+	go test ./restClient
+
 docker-build:
 	docker build -t configrestclient . && docker run -p ${CLIENT_PORT}:${CLIENT_PORT} configrestclient
