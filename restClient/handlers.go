@@ -39,7 +39,7 @@ func createConfigHandler(cc *configClient) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusCreated, gin.H{
 			"config": createResult,
 		})
 	})
@@ -52,7 +52,7 @@ func deleteConfigHandler(cc *configClient) gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusNoContent, gin.H{
 			"config": deleteResult,
 		})
 	})
