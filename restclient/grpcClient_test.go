@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/YAWAL/ConfRESTcli/entities"
+	"github.com/YAWAL/ConfRESTcli/entitie"
 	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -35,9 +35,9 @@ func TestSelectType(t *testing.T) {
 	tsType := "tsconfig"
 	tempType := "tempconfig"
 
-	expMongoType := new(entities.Mongodb)
-	expTsType := new(entities.Tsconfig)
-	expTempType := new(entities.Tempconfig)
+	expMongoType := new(entitie.Mongodb)
+	expTsType := new(entitie.Tsconfig)
+	expTempType := new(entitie.Tempconfig)
 
 	result, err := mockConfigClient.selectType(mongoType)
 	assert.Equal(t, expMongoType, result)
@@ -62,17 +62,17 @@ func TestRetrieveConfig(t *testing.T) {
 	notPresentedType := "errType"
 	ctrl := gomock.NewController(t)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
-	mongoConfig := entities.Mongodb{Domain: testName, Mongodb: true, Host: "testHost", Port: "testPort"}
+	mongoConfig := entitie.Mongodb{Domain: testName, Mongodb: true, Host: "testHost", Port: "testPort"}
 	byteResMongo, err := json.Marshal(mongoConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
-	tsConfig := entities.Tsconfig{Module: testName, Target: "testTarget", SourceMap: true, Excluding: 1}
+	tsConfig := entitie.Tsconfig{Module: testName, Target: "testTarget", SourceMap: true, Excluding: 1}
 	byteResTs, err := json.Marshal(tsConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
-	tempConfig := entities.Tempconfig{RestApiRoot: testName, Host: "testHost", Port: "testPort", Remoting: "testRemoting", LegasyExplorer: true}
+	tempConfig := entitie.Tempconfig{RestApiRoot: testName, Host: "testHost", Port: "testPort", Remoting: "testRemoting", LegasyExplorer: true}
 	byteResTemp, err := json.Marshal(tempConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
@@ -141,7 +141,7 @@ func TestRetrieveConfigsMongo(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	stream := NewMockConfigService_GetConfigsByTypeClient(ctrl)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
-	mongoConfig := entities.Mongodb{Domain: testName, Mongodb: true, Host: "testHost", Port: "testPort"}
+	mongoConfig := entitie.Mongodb{Domain: testName, Mongodb: true, Host: "testHost", Port: "testPort"}
 	byteResMongo, err := json.Marshal(mongoConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
@@ -156,7 +156,7 @@ func TestRetrieveConfigsMongo(t *testing.T) {
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
-	assert.ElementsMatch(t, []entities.Mongodb{mongoConfig}, result)
+	assert.ElementsMatch(t, []entitie.Mongodb{mongoConfig}, result)
 }
 
 func TestRetrieveConfigsTs(t *testing.T) {
@@ -166,7 +166,7 @@ func TestRetrieveConfigsTs(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	stream := NewMockConfigService_GetConfigsByTypeClient(ctrl)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
-	tsConfig := entities.Tsconfig{Module: testName, Target: "testTarget", SourceMap: true, Excluding: 1}
+	tsConfig := entitie.Tsconfig{Module: testName, Target: "testTarget", SourceMap: true, Excluding: 1}
 	byteResTs, err := json.Marshal(tsConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
@@ -183,7 +183,7 @@ func TestRetrieveConfigsTs(t *testing.T) {
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
-	assert.ElementsMatch(t, []entities.Tsconfig{tsConfig}, result)
+	assert.ElementsMatch(t, []entitie.Tsconfig{tsConfig}, result)
 }
 func TestRetrieveConfigsTemp(t *testing.T) {
 	mockConfigClient := Mock{}
@@ -192,7 +192,7 @@ func TestRetrieveConfigsTemp(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	stream := NewMockConfigService_GetConfigsByTypeClient(ctrl)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
-	tempConfig := entities.Tempconfig{RestApiRoot: testName, Host: "testHost", Port: "testPort", Remoting: "testRemoting", LegasyExplorer: true}
+	tempConfig := entitie.Tempconfig{RestApiRoot: testName, Host: "testHost", Port: "testPort", Remoting: "testRemoting", LegasyExplorer: true}
 	byteResTemp, err := json.Marshal(tempConfig)
 	if err != nil {
 		t.Error("error during unit testing: ", err)
@@ -209,7 +209,7 @@ func TestRetrieveConfigsTemp(t *testing.T) {
 	if err != nil {
 		t.Error("error during unit testing: ", err)
 	}
-	assert.ElementsMatch(t, []entities.Tempconfig{tempConfig}, result)
+	assert.ElementsMatch(t, []entitie.Tempconfig{tempConfig}, result)
 }
 
 func TestRetrieveConfigsNotExisting(t *testing.T) {
@@ -239,11 +239,11 @@ func TestCreateConfig(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
 
-	mongoConfig := entities.Mongodb{Domain: testMongoType, Mongodb: true, Host: "testHost", Port: "testPort"}
+	mongoConfig := entitie.Mongodb{Domain: testMongoType, Mongodb: true, Host: "testHost", Port: "testPort"}
 	byteResMongo, err := json.Marshal(mongoConfig)
-	tsConfig := entities.Tsconfig{Module: testTsType, Target: "testTarget", SourceMap: true, Excluding: 1}
+	tsConfig := entitie.Tsconfig{Module: testTsType, Target: "testTarget", SourceMap: true, Excluding: 1}
 	byteResTs, err := json.Marshal(tsConfig)
-	tempConfig := entities.Tempconfig{RestApiRoot: testTempType, LegasyExplorer: true, Remoting: "tempRemoting", Port: "testPort", Host: "testHost"}
+	tempConfig := entitie.Tempconfig{RestApiRoot: testTempType, LegasyExplorer: true, Remoting: "tempRemoting", Port: "testPort", Host: "testHost"}
 	byteResTemp, err := json.Marshal(tempConfig)
 	mockGrpcClient.EXPECT().CreateConfig(gomock.Any(), &api.Config{ConfigType: testTsType, Config: byteResTs}).Return(&api.Responce{Status: "OK"}, nil)
 	mockGrpcClient.EXPECT().CreateConfig(gomock.Any(), &api.Config{ConfigType: testMongoType, Config: byteResMongo}).Return(&api.Responce{Status: "OK"}, nil)
@@ -336,11 +336,11 @@ func TestUpdateConfig(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	mockGrpcClient := NewMockConfigServiceClient(ctrl)
 
-	mongoConfig := entities.Mongodb{Domain: testMongoType, Mongodb: true, Host: "testHost", Port: "testPort"}
+	mongoConfig := entitie.Mongodb{Domain: testMongoType, Mongodb: true, Host: "testHost", Port: "testPort"}
 	byteResMongo, err := json.Marshal(mongoConfig)
-	tsConfig := entities.Tsconfig{Module: testTsType, Target: "testTarget", SourceMap: true, Excluding: 1}
+	tsConfig := entitie.Tsconfig{Module: testTsType, Target: "testTarget", SourceMap: true, Excluding: 1}
 	byteResTs, err := json.Marshal(tsConfig)
-	tempConfig := entities.Tempconfig{RestApiRoot: testTempType, LegasyExplorer: true, Remoting: "tempRemoting", Port: "testPort", Host: "testHost"}
+	tempConfig := entitie.Tempconfig{RestApiRoot: testTempType, LegasyExplorer: true, Remoting: "tempRemoting", Port: "testPort", Host: "testHost"}
 	byteResTemp, err := json.Marshal(tempConfig)
 	mockGrpcClient.EXPECT().UpdateConfig(gomock.Any(), &api.Config{ConfigType: testTsType, Config: byteResTs}).Return(&api.Responce{Status: "OK"}, nil)
 	mockGrpcClient.EXPECT().UpdateConfig(gomock.Any(), &api.Config{ConfigType: testMongoType, Config: byteResMongo}).Return(&api.Responce{Status: "OK"}, nil)
