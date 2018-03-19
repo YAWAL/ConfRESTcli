@@ -27,7 +27,7 @@ install dep:
 .PHONY: tests
 tests:
 	echo "Tests"
-	go test ./restClient
+	go test ./restclient
 
 docker-build:
 	docker build -t configrestclient . && docker run -p ${CLIENT_PORT}:${CLIENT_PORT} configrestclient
