@@ -1,4 +1,4 @@
-FROM golang:1.9.2-alpine3.6 AS build
+FROM golang:1.9.2-alpine3.6 AS builder
 
 RUN mkdir -p /go/src \
 && mkdir -p /go/bin \
@@ -20,10 +20,18 @@ ADD ./Gopkg.toml $GOPATH/src/
 
 WORKDIR $GOPATH/src/restClient
 
-RUN go build -o main
+RUN go build -o $GOPATH/bin/restClient .
 
-RUN rm -rf /GOPATH/src && rm -rf /GOPATH/pkg
+FROM alpine:latest
 
-CMD ["/go/src/restClient/main"]
+RUN apk --no-cache add ca-certificates
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY --from=builder /go/bin/restClient .
+
+CMD ["./restClient"]
 
 EXPOSE $CLIENT_PORT
