@@ -6,14 +6,14 @@ all: dependencies build
 .PHONY: build
 build:
 	echo "Build"
-	go build -o ${GOPATH}/src/github.com/YAWAL/ConfRESTcli/bin/restClient ./restClient
+	go build -o ${GOPATH}/src/github.com/YAWAL/ConfRESTcli/bin/restclient ./restclient
 
 .PHONY: run
 run:
 	echo "Running client"
 	echo ${PDB_HOST}
-	go build -o ${GOPATH}/src/github.com/YAWAL/ConfRESTcli/bin/restClient ./restClient
-	./bin/restClient
+	go build -o ${GOPATH}/src/github.com/YAWAL/ConfRESTcli/bin/restclient ./restclient
+	./bin/restclient
 
 .PHONY: dependencies
 dependencies:
