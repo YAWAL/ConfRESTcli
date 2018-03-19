@@ -7,27 +7,27 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/YAWAL/ConfRESTcli/entities"
+	"github.com/YAWAL/ConfRESTcli/entitie"
 	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 )
 
-func (client *configClient) selectType(cType string) (entities.ConfigInterface, error) {
+func (client *configClient) selectType(cType string) (entitie.ConfigInterface, error) {
 	switch cType {
 	case mongoConf:
-		return new(entities.Mongodb), nil
+		return new(entitie.Mongodb), nil
 	case tempConf:
-		return new(entities.Tempconfig), nil
+		return new(entitie.Tempconfig), nil
 	case tsConf:
-		return new(entities.Tsconfig), nil
+		return new(entitie.Tsconfig), nil
 	default:
 		log.Printf("Such config: %v does not exist", cType)
 		return nil, errors.New("config does not exist")
 	}
 }
 
-func (client *configClient) retrieveConfig(c *gin.Context) (entities.ConfigInterface, error) {
+func (client *configClient) retrieveConfig(c *gin.Context) (entitie.ConfigInterface, error) {
 	configType := c.Param("type")
 	configName := c.Param("name")
 	config, err := client.grpcClient.GetConfigByName(context.Background(), &api.GetConfigByNameRequest{ConfigName: configName, ConfigType: configType})
@@ -37,7 +37,7 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entities.ConfigInter
 	}
 	switch configType {
 	case mongoConf:
-		var mongodb entities.Mongodb
+		var mongodb entitie.Mongodb
 		err := json.Unmarshal(config.Config, &mongodb)
 		if err != nil {
 			log.Printf("Unmarshal mongodb err: %v", err)
@@ -45,7 +45,7 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entities.ConfigInter
 		}
 		return mongodb, err
 	case tempConf:
-		var tempconfig entities.Tempconfig
+		var tempconfig entitie.Tempconfig
 		err := json.Unmarshal(config.Config, &tempconfig)
 		if err != nil {
 			log.Printf("Unmarshal tempconfig err: %v", err)
@@ -53,7 +53,7 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entities.ConfigInter
 		}
 		return tempconfig, err
 	case tsConf:
-		var tsconfig entities.Tsconfig
+		var tsconfig entitie.Tsconfig
 		err := json.Unmarshal(config.Config, &tsconfig)
 		if err != nil {
 			log.Printf("Unmarshal tsconfig err: %v", err)
@@ -67,14 +67,14 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entities.ConfigInter
 
 }
 
-func (client *configClient) retrieveConfigs(c *gin.Context) ([]entities.ConfigInterface, error) {
+func (client *configClient) retrieveConfigs(c *gin.Context) ([]entitie.ConfigInterface, error) {
 	configType := c.Param("type")
 	stream, err := client.grpcClient.GetConfigsByType(context.Background(), &api.GetConfigsByTypeRequest{ConfigType: configType})
 	if err != nil {
 		log.Printf("Error during retrieving stream configs has occurred:%v", err)
 		return nil, err
 	}
-	var resultConfigs []entities.ConfigInterface
+	var resultConfigs []entitie.ConfigInterface
 	for {
 		config, err := stream.Recv()
 		if err == io.EOF {
@@ -86,7 +86,7 @@ func (client *configClient) retrieveConfigs(c *gin.Context) ([]entities.ConfigIn
 		}
 		switch configType {
 		case mongoConf:
-			var mongodb entities.Mongodb
+			var mongodb entitie.Mongodb
 			err := json.Unmarshal(config.Config, &mongodb)
 			if err != nil {
 				log.Printf("Unmarshal mongodb err: %v", err)
@@ -94,7 +94,7 @@ func (client *configClient) retrieveConfigs(c *gin.Context) ([]entities.ConfigIn
 			}
 			resultConfigs = append(resultConfigs, mongodb)
 		case tempConf:
-			var tempconfig entities.Tempconfig
+			var tempconfig entitie.Tempconfig
 			err := json.Unmarshal(config.Config, &tempconfig)
 			if err != nil {
 				log.Printf("Unmarshal tempconfig err: %v", err)
@@ -102,7 +102,7 @@ func (client *configClient) retrieveConfigs(c *gin.Context) ([]entities.ConfigIn
 			}
 			resultConfigs = append(resultConfigs, tempconfig)
 		case tsConf:
-			var tsconfig entities.Tsconfig
+			var tsconfig entitie.Tsconfig
 			err := json.Unmarshal(config.Config, &tsconfig)
 			if err != nil {
 				log.Printf("Unmarshal tsconfig err: %v", err)
@@ -128,7 +128,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		}
 		host := c.Request.PostFormValue("host")
 		port := c.Request.PostFormValue("port")
-		c := entities.Mongodb{Domain: domain, Mongodb: mongodb, Host: host, Port: port}
+		c := entitie.Mongodb{Domain: domain, Mongodb: mongodb, Host: host, Port: port}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
@@ -148,7 +148,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		c := entities.Tempconfig{RestApiRoot: restApiRoot, Host: host, Port: port, Remoting: remoting, LegasyExplorer: legasyExplorer}
+		c := entitie.Tempconfig{RestApiRoot: restApiRoot, Host: host, Port: port, Remoting: remoting, LegasyExplorer: legasyExplorer}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
@@ -170,7 +170,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 			return nil, err
 		}
 
-		c := entities.Tsconfig{Module: module, Target: target, SourceMap: sourceMap, Excluding: excluding}
+		c := entitie.Tsconfig{Module: module, Target: target, SourceMap: sourceMap, Excluding: excluding}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
@@ -196,7 +196,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		}
 		host := c.Request.PostFormValue("host")
 		port := c.Request.PostFormValue("port")
-		c := entities.Mongodb{Domain: domain, Mongodb: mongodb, Host: host, Port: port}
+		c := entitie.Mongodb{Domain: domain, Mongodb: mongodb, Host: host, Port: port}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
@@ -216,7 +216,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		c := entities.Tempconfig{RestApiRoot: restApiRoot, Host: host, Port: port, Remoting: remoting, LegasyExplorer: legasyExplorer}
+		c := entitie.Tempconfig{RestApiRoot: restApiRoot, Host: host, Port: port, Remoting: remoting, LegasyExplorer: legasyExplorer}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
@@ -238,7 +238,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 			return nil, err
 		}
 
-		c := entities.Tsconfig{Module: module, Target: target, SourceMap: sourceMap, Excluding: excluding}
+		c := entitie.Tsconfig{Module: module, Target: target, SourceMap: sourceMap, Excluding: excluding}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
