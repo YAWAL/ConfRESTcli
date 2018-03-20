@@ -7,6 +7,8 @@ import (
 	"log"
 	"strconv"
 
+	"time"
+
 	"github.com/YAWAL/ConfRESTcli/entitie"
 	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
@@ -30,7 +32,9 @@ func (client *configClient) selectType(cType string) (entitie.ConfigInterface, e
 func (client *configClient) retrieveConfig(c *gin.Context) (entitie.ConfigInterface, error) {
 	configType := c.Param("type")
 	configName := c.Param("name")
-	config, err := client.grpcClient.GetConfigByName(context.Background(), &api.GetConfigByNameRequest{ConfigName: configName, ConfigType: configType})
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+	config, err := client.grpcClient.GetConfigByName(ctx, &api.GetConfigByNameRequest{ConfigName: configName, ConfigType: configType})
 	if err != nil {
 		log.Printf("Error during retrieving config has occurred: %v", err)
 		return nil, err
@@ -69,7 +73,9 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entitie.ConfigInterf
 
 func (client *configClient) retrieveConfigs(c *gin.Context) ([]entitie.ConfigInterface, error) {
 	configType := c.Param("type")
-	stream, err := client.grpcClient.GetConfigsByType(context.Background(), &api.GetConfigsByTypeRequest{ConfigType: configType})
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+	stream, err := client.grpcClient.GetConfigsByType(ctx, &api.GetConfigsByTypeRequest{ConfigType: configType})
 	if err != nil {
 		log.Printf("Error during retrieving stream configs has occurred:%v", err)
 		return nil, err
@@ -133,7 +139,9 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.CreateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -153,7 +161,9 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.CreateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -169,13 +179,14 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-
 		c := entitie.Tsconfig{Module: module, Target: target, SourceMap: sourceMap, Excluding: excluding}
 		bytes, err := json.Marshal(c)
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.CreateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -201,7 +212,9 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.UpdateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -221,7 +234,9 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.UpdateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -243,7 +258,9 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		result, err := client.grpcClient.UpdateConfig(context.Background(), &api.Config{ConfigType: configType, Config: bytes})
+		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		defer cancel()
+		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
 			return nil, err
 		}
@@ -256,5 +273,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 func (client *configClient) deleteConfig(c *gin.Context) (*api.Responce, error) {
 	configType := c.Param("type")
 	configName := c.Param("name")
-	return client.grpcClient.DeleteConfig(context.Background(), &api.DeleteConfigRequest{ConfigName: configName, ConfigType: configType})
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
+	return client.grpcClient.DeleteConfig(ctx, &api.DeleteConfigRequest{ConfigName: configName, ConfigType: configType})
 }
