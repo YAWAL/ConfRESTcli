@@ -30,4 +30,4 @@ tests:
 	go test ./restclient
 
 docker-build:
-	docker build -t configrestclient . && docker run --net=${DOCKER_NET_DRIVER} -p ${CLIENT_PORT}:${CLIENT_PORT} configrestclient
+	docker build -t configrestclient . && docker run --net=${DOCKER_NET_DRIVER} -e MICRO_REGISTRY=mdns -p ${CLIENT_PORT}:${CLIENT_PORT} configrestclient

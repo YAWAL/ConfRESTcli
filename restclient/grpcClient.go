@@ -9,8 +9,8 @@ import (
 
 	"time"
 
+	"github.com/YAWAL/ConfRESTcli/api"
 	"github.com/YAWAL/ConfRESTcli/entitie"
-	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
 )

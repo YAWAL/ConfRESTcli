@@ -9,10 +9,12 @@ ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:$PATH
 
 RUN mkdir -p $GOPATH/src/restClient \
-&& mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/entitie
+&& mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/entitie \
+&& mkdir -p $GOPATH/src/github.com/YAWAL/ConfRESTcli/api
 
 ADD restclient $GOPATH/src/restClient
 ADD entitie $GOPATH/src/github.com/YAWAL/ConfRESTcli/entitie
+ADD api $GOPATH/src/github.com/YAWAL/ConfRESTcli/api
 
 ADD ./vendor $GOPATH/src/vendor
 ADD ./Gopkg.lock $GOPATH/src/

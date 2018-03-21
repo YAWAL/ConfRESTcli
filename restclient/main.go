@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
+
+	"github.com/YAWAL/ConfRESTcli/api"
+	microclient "github.com/micro/go-micro/client"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -50,7 +52,7 @@ func main() {
 	log.Printf("State: %v", conn.GetState())
 	defer conn.Close()
 
-	grpcClient := api.NewConfigServiceClient(conn)
+	grpcClient := api.NewConfigServiceClient("configservice", microclient.DefaultClient)
 	cc := configClient{grpcClient: grpcClient}
 
 	log.Printf("Processing client...")
