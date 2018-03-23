@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/YAWAL/ConfRESTcli/api"
-	microclient "github.com/micro/go-micro/client"
+	micro "github.com/micro/go-micro/client"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
@@ -21,7 +21,7 @@ const (
 
 	defaultClientPort  = "8080"
 	defaultServiceHost = "localhost"
-	defaultServicePort = "3000"
+	defaultServicePort = "8500"
 )
 
 type configClient struct {
@@ -43,6 +43,8 @@ func main() {
 		servicePort = defaultServicePort
 	}
 
+	//cl := api.NewConfigServiceClient("c.client", micro.NewClient())
+
 	address := fmt.Sprintf("%s:%s", serviceHost, servicePort)
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -52,7 +54,7 @@ func main() {
 	log.Printf("State: %v", conn.GetState())
 	defer conn.Close()
 
-	grpcClient := api.NewConfigServiceClient("configservice", microclient.DefaultClient)
+	grpcClient := api.NewConfigServiceClient("api", micro.NewClient())
 	cc := configClient{grpcClient: grpcClient}
 
 	log.Printf("Processing client...")
