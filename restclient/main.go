@@ -6,6 +6,9 @@ import (
 	"net/http"
 	"os"
 
+	"strconv"
+	"time"
+
 	"github.com/YAWAL/GetMeConfAPI/api"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
@@ -17,13 +20,15 @@ const (
 	tsConf    = "tsconfig"
 	tempConf  = "tempconfig"
 
-	defaultClientPort  = "8080"
-	defaultServiceHost = "localhost"
-	defaultServicePort = "3000"
+	defaultClientPort     = "8080"
+	defaultServiceHost    = "localhost"
+	defaultServicePort    = "3000"
+	defaultServicePortStr = "1000"
 )
 
 type configClient struct {
-	grpcClient api.ConfigServiceClient
+	grpcClient      api.ConfigServiceClient
+	contextDeadline time.Duration
 }
 
 func main() {
@@ -40,6 +45,14 @@ func main() {
 	if servicePort == "" {
 		servicePort = defaultServicePort
 	}
+	contDeadlineStr := os.Getenv("CONTEXT_DEADLINE_MILLISECONDS")
+	if contDeadlineStr == "" {
+		contDeadlineStr = defaultServicePortStr
+	}
+	contDeadline, err := strconv.Atoi(contDeadlineStr)
+	if err != nil {
+		log.Fatalf("can not convert context deadline value to int: %v", err)
+	}
 
 	address := fmt.Sprintf("%s:%s", serviceHost, servicePort)
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -51,7 +64,7 @@ func main() {
 	defer conn.Close()
 
 	grpcClient := api.NewConfigServiceClient(conn)
-	cc := configClient{grpcClient: grpcClient}
+	cc := configClient{grpcClient: grpcClient, contextDeadline: time.Duration(contDeadline)}
 
 	log.Printf("Processing client...")
 
