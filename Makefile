@@ -11,7 +11,6 @@ build:
 .PHONY: run
 run:
 	echo "Running client"
-	echo ${PDB_HOST}
 	go build -o ${GOPATH}/src/github.com/YAWAL/ConfRESTcli/bin/restclient ./restclient
 	./bin/restclient
 
