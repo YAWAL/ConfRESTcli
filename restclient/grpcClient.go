@@ -32,7 +32,7 @@ func (client *configClient) selectType(cType string) (entitie.ConfigInterface, e
 func (client *configClient) retrieveConfig(c *gin.Context) (entitie.ConfigInterface, error) {
 	configType := c.Param("type")
 	configName := c.Param("name")
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 	defer cancel()
 	config, err := client.grpcClient.GetConfigByName(ctx, &api.GetConfigByNameRequest{ConfigName: configName, ConfigType: configType})
 	if err != nil {
@@ -73,7 +73,7 @@ func (client *configClient) retrieveConfig(c *gin.Context) (entitie.ConfigInterf
 
 func (client *configClient) retrieveConfigs(c *gin.Context) ([]entitie.ConfigInterface, error) {
 	configType := c.Param("type")
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 	defer cancel()
 	stream, err := client.grpcClient.GetConfigsByType(ctx, &api.GetConfigsByTypeRequest{ConfigType: configType})
 	if err != nil {
@@ -139,7 +139,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -161,7 +161,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -184,7 +184,7 @@ func (client *configClient) createConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.CreateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -212,7 +212,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -234,7 +234,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -258,7 +258,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 		if err != nil {
 			return nil, err
 		}
-		ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+		ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 		defer cancel()
 		result, err := client.grpcClient.UpdateConfig(ctx, &api.Config{ConfigType: configType, Config: bytes})
 		if err != nil {
@@ -273,7 +273,7 @@ func (client *configClient) updateConfig(c *gin.Context) (*api.Responce, error) 
 func (client *configClient) deleteConfig(c *gin.Context) (*api.Responce, error) {
 	configType := c.Param("type")
 	configName := c.Param("name")
-	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), client.contextDeadline*time.Millisecond)
 	defer cancel()
 	return client.grpcClient.DeleteConfig(ctx, &api.DeleteConfigRequest{ConfigName: configName, ConfigType: configType})
 }
