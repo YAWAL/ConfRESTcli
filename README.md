@@ -58,3 +58,7 @@ To to run the application in docker container
 ````````````````````````````
 make docker-build
 ````````````````````````````
+To to run the client application in a docker container in docker-compose network. Environmental variables in .env file should be changed.
+``````````````````
+make docker-compose-build
+``````````````````
