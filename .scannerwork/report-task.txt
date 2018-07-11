@@ -1,0 +1,6 @@
+projectKey=confRestCLi
+serverUrl=http://localhost:9000
+serverVersion=6.7.4.38452
+dashboardUrl=http://localhost:9000/dashboard/index/confRestCLi
+ceTaskId=AWSJfS_4oFAfTU2sjkYw
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWSJfS_4oFAfTU2sjkYw
