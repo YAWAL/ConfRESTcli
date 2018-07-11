@@ -8,8 +8,6 @@ pipeline{
                  sh 'make tests || true'
              }
         }
-
-
     }
 
 
